@@ -1,0 +1,21 @@
+Ignore dependencies, they will be installed inside the container
+
+node_modules/
+
+Ignore Next.js build output and cache
+
+.next/
+
+Ignore local environment variables
+
+.env.local
+
+Ignore log files
+
+npm-debug.log*
+yarn-error.log
+yarn-debug.log
+
+Ignore OS-specific files
+
+.DS_Store

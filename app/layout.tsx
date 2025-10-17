@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
+import { HeaderAuthArea } from "@/components/HeaderAuthArea";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,11 +26,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <AuthProvider>
+          <div className="min-h-dvh flex flex-col">
+            <header className="w-full border-b p-4 flex items-center justify-between">
+              <div className="font-semibold">Nested Comments</div>
+              <HeaderAuthArea />
+            </header>
+            <main className="flex-1 p-4">{children}</main>
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );
 }
+
+// moved to client component components/HeaderAuthArea.tsx
