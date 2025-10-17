@@ -4,6 +4,11 @@ import { useState } from "react";
 import { Button, Input, Label, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
 
+type ApiError = { response?: { data?: { detail?: string } } };
+function isApiError(e: unknown): e is ApiError {
+  return typeof e === "object" && e !== null && "response" in e;
+}
+
 export function AuthDialog() {
   const { login, register } = useAuth();
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -25,8 +30,13 @@ export function AuthDialog() {
         await register(name, email, password);
       }
       setOpen(false);
-    } catch (err: any) {
-      setError(err?.response?.data?.detail || "Something went wrong");
+    } catch (err: unknown) {
+      const message = isApiError(err)
+        ? err.response?.data?.detail
+        : err instanceof Error
+        ? err.message
+        : undefined;
+      setError(message || "Something went wrong");
     } finally {
       setSubmitting(false);
     }
